@@ -230,7 +230,7 @@ isCentOSStream(){
 }
 
 isSupportedLinuxDistro() {
-    if [[ isUbuntu18() || isCentOSStream() ]]; then
+    if [[ isUbuntu18 || isCentOSStream ]]; then
  		return 0
 	else
 		return 1
