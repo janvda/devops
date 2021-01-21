@@ -212,12 +212,29 @@ isMacOS() {
 	fi
 }
 
+
 isUbuntu18() {
     if [[ "$DISTRO" == 'Ubuntu 18.'* ]]; then
 		return 0
 	else
 		return 1
 	fi
+}
+
+isCentOSStream(){
+    if [[ "$DISTRO" == 'CentOS Stream' ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+isSupportedLinuxDistro() {
+    if [[ isUbuntu18() || isCentOSStream() ]]; then
+ 		return 0
+	else
+		return 1
+	fi   
 }
 
 isDirInPath() {
@@ -430,8 +447,8 @@ if [[ -z "$EXCHANGE_ROOT_PW" || -z "$EXCHANGE_ROOT_PW_BCRYPTED" ]]; then
     fatal 1 "these environment variables must be set: EXCHANGE_ROOT_PW, EXCHANGE_ROOT_PW_BCRYPTED"
 fi
 ensureWeAreRoot
-if ! isMacOS && ! isUbuntu18; then
-    fatal 1 "the host must be Ubuntu 18.x or macOS"
+if ! isMacOS && ! isSupportedLinuxDistro; then
+    fatal 1 "the host OS must be Ubuntu 18.x, CentOS Stream or macOS"
 fi
 confirmCmds grep awk curl   # these should be automatically available on all the OSes we support
 echo "Management hub services will listen on $HZN_LISTEN_IP"
